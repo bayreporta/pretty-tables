@@ -1,0 +1,70 @@
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400italic,400,300,700' rel='stylesheet' type='text/css'>
+	<title>Pretty Tables</title>
+	<style type="text/css">
+		body {font-size:100%;font-family:'roboto Condensed','san-serif';}
+
+		#pretty-table table {width:100%;}
+		#pretty-table tr:first-of-type {height:50px;}
+
+		.progress {display: none;height: 10px;width: 450px;float: left;margin: 2px 0 0 20px;overflow: hidden;background-color: #f5f5f5;border-radius: 4px;-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);box-shadow: inset 0 1px 2px rgba(0,0,0,.1);}
+		.progress-bar {background:#4169E1;float: left;height: 100%;font-size: 12px;line-height: 20px;color: #fff;text-align: center;-webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);-webkit-transition: width .6s ease;-o-transition: width .6s ease;transition: width .6s ease;}
+	</style>
+</head>
+<body>
+	<div id="loading"><h1>LOADING...</h1><div class="progress"><div class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div>
+	<div id="pretty-table"><table></table></div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://edsource.org/wp-content/js/d3.min.js"></script>
+	<script src="http://edsource.org/wp-content/js/underscore-min.js"></script>
+	<script>
+		/* GLOBAL VARIABLES
+		======================================*/
+		var tableData = [], dataLength,	columnLength, progressBar = 0, progressBarStep;
+		
+
+		/* TABLE FUNCTIONS
+		======================================*/
+		var prettyTables = {
+			createTable:function(data){
+				/* Create Header -------------*/
+				$('#pretty-table table').append('<tr></tr>');
+				for (i=0 ; i < columnLength ; i++){
+					$('tr:eq(0)').append('<th>'+ data[0][i] +'</th>');
+				}
+
+				/* Create Rows -------------*/
+				for (i=1 ; i < dataLength; i++){
+					$('#pretty-table table').append('<tr><td>'+data[i][0]+'</td><td>'+data[i][1]+'</td><td>'+data[i][2]+'</td><td>'+data[i][3]+'</td><td>'+data[i][4]+'</td><td>'+data[i][5]+'</td><td>'+data[i][6]+'</td><td>'+data[i][7]+'</td><td>'+data[i][8]+'</td><td>'+data[i][9]+'</td><td>'+data[i][10]+'</td><td>'+data[i][11]+'</td><td>'+data[i][12]+'</td><td>'+data[i][13]+'</td></tr>');
+
+					/*for (ii=0 ; ii < columnLength ; ii++){
+						$('tr:eq('+i+')').append('<td>'+ data[i][ii] +'</td>');
+					}*/
+					progressBar += progressBarStep;
+					$('.progress-bar').css('width', progressBar + '%');
+					console.log(progressBar)
+				}
+
+			}
+		}
+
+		/* PARSING DATA
+		======================================*/
+		d3.text('data/data.csv', 'text/csv', function(text) {
+			var thisData = d3.csv.parseRows(text);
+			dataLength = thisData.length;
+			columnLength = thisData[0].length - 1;
+			progressBarStep = 100 / dataLength;
+			for (i = 0; i < dataLength; i++) {
+				var values = thisData[i].slice(0);
+				tableData.push(values);
+			}
+			return prettyTables.createTable(tableData);
+		});	
+
+	</script>
+</body>
+
+</html>
