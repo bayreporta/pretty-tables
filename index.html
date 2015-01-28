@@ -39,10 +39,10 @@
 
 			<div id="pretty-table-ask">
 				<h3>Ask a Question</h3>
-				<p class="pretty-table-button pretty-table-question" filter="reports">Failed to Report in 2014?</p>
-				<p class="pretty-table-button pretty-table-question" filter="herd">No Herd Immunity?</p>
-				<p class="pretty-table-button pretty-table-question" filter="decline">Decline in Opt-Outs?</p>
-				<p class="pretty-table-button pretty-table-question" filter="increase">Increase in Opt-Outs?</p>
+				<p class="pretty-table-button pretty-table-questions" filter="reports">Failed to Report in 2014?</p>
+				<p class="pretty-table-button pretty-table-questions" filter="herd">No Herd Immunity?</p>
+				<p class="pretty-table-button pretty-table-questions" filter="decline">Decline in Opt-Outs?</p>
+				<p class="pretty-table-button pretty-table-questions" filter="increase">Increase in Opt-Outs?</p>
 			</div>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 			herd: false,
 			increase: false,
 			decline: false,
-			showMe: 100
+			showMe: 7465
 		}
 
 		/* TABLE FUNCTIONS
@@ -146,19 +146,30 @@
 		/* SEARCH FUNCTIONS
 		======================================*/	
 		var $rows = $("#pretty-table table tr:not(tr:eq(0))");
-		$('#execute-search').on('click', function(){
+		var allRows = document.getElementsByTagName('tr');
+		function searchTool(){
 			var val = $.trim($('#pretty-table-search').val()).replace(/ +/g, ' ').toLowerCase();
-		    console.log(val)
 		    if (val === ''){
-		    	$('tr[show-me="yes"]').css('display','table-row');
-		    	$('tr[show-me="no"]').css('display','none');
+		    	var showMe = document.querySelectorAll('[show-me=yes]');
 		    }
 		    else if (val !== '') {
-		    	$rows.show().filter(function() {
-			        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-			        return !~text.indexOf(val);
-		   		}).hide();
+		    	 for (var i=1 ; i < allRows.length ; i++){
+		    	 	allRows[i].style.display = "table-row";
+
+		    	 	var testText = allRows[i].textContent;
+		    		testText = testText.replace(/\s+/g, ' ').toLowerCase();
+					if (testText.indexOf(val) == -1){
+						allRows[i].style.display = "none";
+					}
+		    	 }
 		    }
+		}		
+	
+		$('#execute-search').on('click', searchTool());
+		$('#pretty-table-search').on('keypress', function(e){
+			var key = e.which;
+			if (key == 13){searchTool();}
+
 		})
 
 		$('#reset-search').on('click', function(){
@@ -171,52 +182,85 @@
 		======================================*/	
 		$('.pretty-table-questions').on('click', function(){
 			var filterType = $(this).attr('filter');
-
 			switch(filterType){
 				case 'reports':
+					var theseRows = document.querySelectorAll('[reported=Y]');
 					if (filterStatus.reported == false){
-						$('tr[reported="Y"]').css('display','none');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'none';
+						}
 						$(this).css('background','#aaa');
 						filterStatus.reported = true;
 					}
 					else {
-						$('tr[reported]:not(tr[show-me="no"])').css('display','table-row');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'table-row';
+						}
 						$(this).css('background','#ddd');
 						filterStatus.reported = false;
 					}
 					break;
 				case 'herd':
+					var theseRows = document.querySelectorAll('[herd-immunity=Yes]');
 					if (filterStatus.herd == false){
-						$('tr[herd-immunity="Yes"]').css('display','none');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'none';
+						}
 						$(this).css('background','#aaa');
 						filterStatus.herd = true;
 					}
 					else {
-						$('tr[herd-immunity]:not(tr[show-me="no"]').css('display','table-row');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'table-row';
+						}
 						$(this).css('background','#ddd');
 						filterStatus.herd = false;
 					}
 					break;
 				case 'increase':
-					if (filterStatus.increase == false){
-						$('tr[change="neither"]').add('tr[change="decline"]').css('display','none');
+					var theseRows = document.querySelectorAll('[change=neither]');
+					var theseRows2 = document.querySelectorAll('[change=decline]');
+					if (filterStatus.increase == false){					
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'none';
+						}
+						for (var i = 0 ; i < theseRows2.length ; i++){
+							theseRows2[i].style.display = 'none';
+						}
 						$(this).css('background','#aaa');
 						filterStatus.increase = true;
 					}
 					else {
-						$('tr[change]:not(tr[show-me="no"]').css('display','table-row');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'table-row';
+						}
+						for (var i = 0 ; i < theseRows2.length ; i++){
+							theseRows2[i].style.display = 'table-row';
+						}
 						$(this).css('background','#ddd');
 						filterStatus.increase = false;
 					}
 					break;
 				case 'decline':
+					var theseRows = document.querySelectorAll('[change=neither]');
+					var theseRows2 = document.querySelectorAll('[change=increase]');
 					if (filterStatus.decline == false){
-						$('tr[change="neither"]').add('tr[change="increase"]').css('display','none');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'none';
+						}
+						for (var i = 0 ; i < theseRows2.length ; i++){
+							theseRows2[i].style.display = 'none';
+						}
 						$(this).css('background','#aaa');
 						filterStatus.decline = true;
 					}
 					else {
-						$('tr[change]:not(tr[show-me="no"]').css('display','table-row');
+						for (var i = 0 ; i < theseRows.length ; i++){
+							theseRows[i].style.display = 'table-row';
+						}
+						for (var i = 0 ; i < theseRows2.length ; i++){
+							theseRows2[i].style.display = 'table-row';
+						}
 						$(this).css('background','#ddd');
 						filterStatus.decline = false;
 					}
