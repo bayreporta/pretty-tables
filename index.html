@@ -1,6 +1,7 @@
 <html>
 <head>
 	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400italic,400,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<title>Pretty Tables</title>
 	<style type="text/css">
 		body {font-size:100%;font-family:'roboto Condensed','san-serif';}
@@ -16,11 +17,12 @@
 
 		/* TABLE STYLE
 		===================================*/
+		.fa {margin:0 0 0 5px;}
 		#pretty-table table {width:100%; border-collapse: collapse;}
 		#pretty-table td {font-size:.8em;padding:10px;}
 		#pretty-table th {font-size:1em;text-align:left;padding:10px;vertical-align: top;}
-		#pretty-table tr {border-bottom:1px solid #eee;padding:10px 0;}
-		#pretty-table tr:first-of-type {height:50px;border-bottom:1px solid #aaa;cursor:pointer;}
+		#pretty-table tr {padding:10px 0;}
+		#pretty-table thead tr:first-of-type {height:50px;border-bottom:1px solid #aaa;cursor:pointer;}
 
 		/* HIDE COLUMNS
 		===================================*/
@@ -59,6 +61,7 @@
 	</div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="js/jquery.tablesorter.min.js"></script>
 	<script src="data/data.json"></script>
 
 	<script>
@@ -77,6 +80,7 @@
 			private: false,
 			showMe: 7465
 		}
+		var sortStatus = [], initSort = 8, initSortDirect = 1;
 
 		/* TABLE FUNCTIONS
 		======================================*/
@@ -91,9 +95,12 @@
 				var contain, table, td, tr, th;
 				var frag = document.createDocumentFragment();
 				var frag2 = document.createDocumentFragment();
+				var frag3 = document.createDocumentFragment();
 
 				contain = document.getElementById('pretty-table');
 				table = document.createElement('table');
+				thead = document.createElement('thead');
+				tbody = document.createElement('tbody');
 
 				/* ROWS
 				---------------------------------*/
@@ -103,10 +110,11 @@
 						for (var j = 0 ; j < this.columnLength; j++){
 							th = document.createElement('th');
 							th.appendChild(document.createTextNode(this.data[0][j]));
-							frag2.appendChild(th);
+							frag3.appendChild(th);
+							sortStatus[j] = -1; //init sorting
 						}
-						tr.appendChild(frag2);
-						frag.appendChild(tr);
+						tr.appendChild(frag3);
+						thead.appendChild(tr);
 					}
 					else {
 						for (var j = 0 ; j < this.columnLength; j++){
@@ -115,34 +123,18 @@
 							frag2.appendChild(td);
 						}
 
-						/*reported color
-						if (this.data[i][5] === "No" || this.data[i][5] === "Not Known"){
-							tr.style.background = "#edc3c3";
-						}*/
-
 						/* Establish Attributes for Each Row */
 						tr.setAttribute('reported', this.data[i][4]);
 						tr.setAttribute('herd-immunity', this.data[i][5]);
 						tr.setAttribute('pbe', parseInt(this.data[i][8]));
 						tr.setAttribute('type', this.data[i][1]);
-						if (parseInt(this.data[i][9]) < 0 || this.data[i][9] === 'Down to None'){
-							tr.setAttribute('change', 'decline');
-						}
-						else if (parseInt(this.data[i][9]) > 0 || this.data[i][9] === 'Up from None'){
-							tr.setAttribute('change', 'increase');
-						}
-						else {
-							tr.setAttribute('change', 'neither');
-						}
+						if (parseInt(this.data[i][9]) < 0 || this.data[i][9] === 'Down to None'){tr.setAttribute('change', 'decline');}
+						else if (parseInt(this.data[i][9]) > 0 || this.data[i][9] === 'Up from None'){tr.setAttribute('change', 'increase');}
+						else {tr.setAttribute('change', 'neither');}
 
 						/* Address # to Show */
-						if (i < filterStatus.showMe){
-							tr.setAttribute('show-me', 'yes');
-						}
-						else {
-							tr.setAttribute('show-me', 'no');
-							tr.setAttribute('style', 'display:none');
-						}
+						if (i < filterStatus.showMe){tr.setAttribute('show-me', 'yes');}
+						else {tr.setAttribute('show-me', 'no');tr.setAttribute('style', 'display:none');}
 
 						/* Append Row */
 						tr.appendChild(frag2);
@@ -152,8 +144,45 @@
 
 				/* TABLE
 				---------------------------------*/
-				table.appendChild(frag);
+				table.appendChild(thead);
+				tbody.appendChild(frag);
+				table.appendChild(tbody);
 				contain.appendChild(table);
+
+				/* FUNCTIONS
+				---------------------------------*/
+				prettyTables.defaultSort();	
+			},
+			defaultSort: function(){
+				//default sort
+				$("table").tablesorter({ 
+        			sortList: [[initSort,initSortDirect]] 
+    			}); 
+    			sortStatus[initSort] = initSortDirect;
+
+    			//add sort icons
+    			$('thead th:eq(0)').append('<i head="0" class="fa fa-sort"></i>').on('click', function(){prettyTables.sortTable(0);});
+    			$('thead th:eq(3)').append('<i head="3" class="fa fa-sort"></i>').on('click', function(){prettyTables.sortTable(3);});;
+    			$('thead th:eq(6)').append('<i head="6" class="fa fa-sort"></i>').on('click', function(){prettyTables.sortTable(6);});;
+    			$('thead th:eq(8)').append('<i head="8" class="fa fa-sort-desc"></i>').on('click', function(){prettyTables.sortTable(8);});;
+    			$('thead th:eq(9)').append('<i head="9" class="fa fa-sort"></i>').on('click', function(){prettyTables.sortTable(9);});;
+			},
+			sortTable: function(th){
+				if (sortStatus[th] == -1){
+					sortStatus[th] = 0;
+					$('.fa[head="'+th+'"]').remove();
+					$('thead th:eq('+th+')').append('<i head="'+th+'" class="fa fa-sort-asc"></i>');
+				}
+				else if (sortStatus[th] == 0){
+					sortStatus[th] = 1;
+					$('.fa[head="'+th+'"]').remove();
+					$('thead th:eq('+th+')').append('<i head="'+th+'" class="fa fa-sort-desc"></i>');
+				}
+				else if (sortStatus[th] == 1){
+					sortStatus[th] = 0;
+					$('.fa[head="'+th+'"]').remove();
+					$('thead th:eq('+th+')').append('<i head="'+th+'" class="fa fa-sort-asc"></i>');
+				}				
 			}
 		}
 
@@ -166,6 +195,7 @@
 		var $rows = $("#pretty-table table tr:not(tr:eq(0))");
 		var allRows = document.getElementsByTagName('tr');
 		function searchTool(){
+			console.log('11)')
 			var val = $.trim($('#pretty-table-search').val()).replace(/ +/g, ' ').toLowerCase();
 		    if (val === ''){
 		    	var showMe = document.querySelectorAll('[show-me=yes]');
@@ -183,7 +213,7 @@
 		    }
 		}		
 	
-		$('#execute-search').on('click', searchTool());
+		$('#execute-search').on('click', function(){searchTool();});
 		$('#pretty-table-search').on('keypress', function(e){
 			var key = e.which;
 			if (key == 13){searchTool();}
