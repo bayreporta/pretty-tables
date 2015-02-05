@@ -192,6 +192,9 @@ $('.pretty-table-button').on({
 		else if (type === '2'){
 			$(this).css('background','#f0c5f9');					
 		}
+		else {
+			$(this).css('background','#aaa');
+		}
 	},
 	mouseleave: function(){
 		var type = $(this).attr('filter');
@@ -215,6 +218,14 @@ $('.pretty-table-button').on({
 		else if (type === '2'){
 			if (filterStatus.charter == true){
 				$(this).css('background','#f0c5f9');
+			}
+			else {
+				$(this).css('background','#ddd');
+			}
+		}
+		else {
+			if ($(this).attr('clicked') === 'yes'){
+				return;
 			}
 			else {
 				$(this).css('background','#ddd');
