@@ -1,0 +1,39 @@
+	#pretty-table {font-size:100% !important;font-family:'roboto Condensed','san-serif';}
+	.floatleft {float:left !important;}
+
+	#pretty-table-top {position:fixed;bottom:0;right:0;width:40px;height:40px;background:rgb(74,143,119);cursor:pointer;}
+	#pretty-table-top i {color:#fff;font-size: 2em;}	
+
+	/* SEARCH AND FILTERS
+	===================================*/
+	#pretty-table-control {border-bottom:1px solid #aaa;padding:20px 0 20px 10px !important;}
+	#pretty-table-search {height:20px;width:30%;border:1px solid #ccc; float:left;max-width:300px;margin:-3px 0 0 0 !important;}
+	#pretty-table-search-options {margin:0 0 20px 0 !important;}
+	#pretty-table-search-options .pretty-table-button:hover {background:#aaa;}
+	#pretty-table-search-options div:first-of-type {float:left;}
+	#execute-search, #reset-search {margin:0 0 0 20px !important;padding:5px;border-radius: 0;}
+	.pretty-table-button {padding: 8px;display: inline;background: #ddd;color: #333;cursor: pointer;margin: 0 10px 0 0;font-size: .8em;border-radius: 5px;}
+	#pretty-table-ask div:last-child > div {float:left;}
+	#pretty-table-ask div:last-child div:last-of-type {float:none;}
+	#pretty-table-defs {margin: 35px 0 0 0;padding: 5px 0 0 0;border-top: 1px solid #ccc;}
+	#pretty-table-defs p {font-size:.8em;}
+
+	@media screen and (max-width:700px){
+		#pretty-table-ask div:last-child > div {margin:0 0 30px 0 !important;}
+	}
+	@media screen and (max-width: 450px){
+		#pretty-table-search {width:65% !important;}
+	}
+
+	/* TABLE STYLE
+	===================================*/
+	.fa {margin:0 0 0 5px;}
+	#pretty-table table {width:100%; border-collapse: collapse;}
+	#pretty-table td {font-size:.8em;padding:10px;}
+	#pretty-table th {font-size:1em;text-align:left;padding:10px;vertical-align: top;}
+	#pretty-table tr {padding:10px 0;}
+	#pretty-table thead tr:first-of-type {height:50px;border-bottom:1px solid #aaa;cursor:pointer;}
+
+	/* HIDE COLUMNS
+	===================================*/
+	#pretty-table td:nth-child(n+11), #pretty-table th:nth-child(n+11), #pretty-table th:nth-child(n+5):nth-child(-n+6), #pretty-table td:nth-child(n+5):nth-child(-n+6), #pretty-table td:nth-child(n+2):nth-child(-n+3), #pretty-table th:nth-child(n+2):nth-child(-n+3), #pretty-table td:nth-child(8), #pretty-table th:nth-child(8) {display: none;}

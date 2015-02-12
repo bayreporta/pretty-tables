@@ -1,0 +1,48 @@
+<html>
+<head>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<title>Pretty Tables</title>
+</head>
+<body>
+	<a name="top"></a>
+	<div id="pretty-table">
+		<div id="pretty-table-top"><a href="#top"><i class="fa fa-arrow-up"></i></a></div>
+		<div id="pretty-table-control">
+			<div id="pretty-table-search-options">
+				<input id="pretty-table-search" type="text" style="height:24px;" placeholder="Type to Search">
+				<div><p class="pretty-table-button" id="execute-search">Search</p></div>
+				<div><p class="pretty-table-button" id="reset-search">Reset</p></div>
+			</div>
+
+			<div id="pretty-table-ask">
+				<div>
+					<h4>Type of School</h4>
+					<p class="pretty-table-button pretty-table-questions" filter="0">Public</p>
+					<p class="pretty-table-button pretty-table-questions" filter="1">Private</p>
+					<p class="pretty-table-button pretty-table-questions" filter="2">Charter</p>
+				</div>
+				<div>
+					<h4>Ask a Question</h4>
+					<div><p class="pretty-table-button pretty-table-questions" filter="3">Reported in 2014?</p></div>
+					<div><p class="pretty-table-button pretty-table-questions" filter="4">Failed to Report in 2014?</p></div>
+					<div><p class="pretty-table-button pretty-table-questions" filter="5">No Herd Immunity?</p></div>
+					<div><p class="pretty-table-button pretty-table-questions" filter="6">Decline in Opt-Outs?</p></div>
+					<div><p class="pretty-table-button pretty-table-questions" filter="7">Increase in Opt-Outs?</p></div>
+				</div>
+			</div>
+			<div id="pretty-table-defs">
+				<p><strong>Herd Immunity:</strong> Although the exact percent varies by disease, herd immunity generally occurs when at least 90 percent of the population is vaccinated.</p>
+				<p><strong>Opt-Out Rate:</strong> The percentage of kindergarteners that are not vaccinated for personal belief reasons.</p>
+				<p><strong>Percentage Point Change:</strong> Percantage point change in opt-out rate for school from 2007 to 2014.</p>
+				<p><strong>Public vs Charter:</strong> Public schools in this database refer to non-charter public schools, while Charter refers to chartered public schools.</p>
+			</div>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="js/jquery.tablesorter.min.js"></script>
+	<script src="data/data.json"></script>
+	<script src="js/pretty-table.js"></script>
+</body>
+
+</html>
