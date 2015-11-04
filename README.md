@@ -1,2 +1,2 @@
 # pretty-tables
-Working Repo for Pretty Tables App for Edsource
+Working Repo for Javascript Tables
